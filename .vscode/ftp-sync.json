@@ -1,0 +1,16 @@
+{
+    "remotePath": "./cr/",
+    "host": "192.168.1.6",
+    "username": "chip",
+    "password": "1q2w3e4r",
+    "port": 21,
+    "protocol": "ftp",
+    "uploadOnSave": false,
+    "passive": false,
+    "debug": false,
+    "privateKeyPath": null,
+    "ignore": [
+        "\\.vscode",
+        "\\.git"
+    ]
+}
