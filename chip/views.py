@@ -9,7 +9,11 @@ from subprocess import Popen, PIPE
 
 class BatteryInfo():
     def __init__(self):
-        self.voltage = 'Error'
+        self.voltage = 'n/a'
+        self.percent = 'n/a'
+        self.charging = 'n/a'
+        self.drain = 'n/a'
+        self.temp = 'n/a'
         if os.name=="nt":
             self.script = "battery.bat"
         else:
@@ -19,22 +23,34 @@ class BatteryInfo():
         (output, err) = process.communicate()
         exit_code = process.wait()
         output = output.decode("utf-8")
-        for kv in output.split(os.linesep):
-            keyval = kv.split("=")
-            if len(keyval)==2:
+        for kval in output.split(os.linesep):
+            keyval = kval.split("=")
+            if len(keyval) == 2:
                 if keyval[0].strip() == 'BAT_VOLT':
                     self.voltage = keyval[1].strip()
+                if keyval[0].strip() == 'BAT_GAUGE':
+                    self.percent = keyval[1].strip()
+                if keyval[0].strip() == 'CHARG_IND':
+                    self.charging = keyval[1].strip()
+                if keyval[0].strip() == 'BAT_DRAIN':
+                    self.drain = keyval[1].strip()
+                if keyval[0].strip() == 'TEMP':
+                    self.temp = keyval[1].strip()
 
 def index(request):
-    battery = BatteryInfo()
-    battery.getInfo()
+    batt = BatteryInfo()
+    batt.getInfo()
     template = loader.get_template('chip/index.html')
     context = {
-        'battery': battery,
+        'battery': batt,
     }
     return HttpResponse(template.render(context, request))
 
 def battery(request):
-    battery = BatteryInfo()
-    battery.getInfo()
-    return JsonResponse({'volts':battery.voltage})
+    batt = BatteryInfo()
+    batt.getInfo()
+    return JsonResponse({'volts':batt.voltage, 
+    "percent":batt.percent, 
+    "charging":batt.charging, 
+    "drain":batt.drain, 
+    "temp":batt.temp})

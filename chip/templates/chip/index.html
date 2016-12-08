@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <style>
 	@media only screen and (max-width : 768px){
@@ -39,7 +40,7 @@
 
 <body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top center-style">
+<nav class="navbar navbar-inverse navbar-static-top center-style">
     <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar1">
@@ -53,7 +54,7 @@
       </div>
       <div id="navbar1" class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a href="#">Статус</a></li>
+          <li class="active"><a href="/">Статус</a></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Настройки <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
@@ -67,7 +68,7 @@
             </ul>
           </li>
           <li class="active"><div id="bat_stat">
-              <div style='color:#FFFFFF'>Напряжение: <p style='color:#FF0000'>Нет данных</p></div>
+              <i class='fa fa-battery-0' style='color:white'></i><span style='color:white'> n/a</span>
               </div></li>
         </ul>
       </div>
@@ -75,7 +76,25 @@
     </div>
     <!--/.container-fluid -->
   </nav>
-
+<div class="container body-content">
+<div class="panel panel-default">
+  
+    <div class="panel-body">
+<div id="statuspanel">
+    <div style='color:#000000'>Напряжение: <span style='color:#000000'> n/a </span></div>
+    <br>
+    <div style='color:#000000'>Температура: <span style='color:#000000'> n/a </span></div>
+    <br>
+    <div style='color:#000000'>Потребляемый ток: <span style='color:#000000'> n/a </span></div>
+</div>
+    </div>
+    </div>
+        <hr />
+        <footer>
+            <p>&copy; 2016 - SinoSoft</p>
+        </footer>
+    </div>
+    
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -85,21 +104,60 @@
         crossorigin="anonymous"></script>
 
     <script>
- function Reload()
+ function ReloadBattery()
  {
 $.ajax({
   url: "battery",
   cache: false,
   success: function(data){
-    $("#bat_stat").html("<div style='color:#FFFFFF'>Напряжение: <p style='color:#00FF00'>"+data.volts+" мВ</p></div>");
+      if (parseFloat(data.drain) < 10.0)
+    $("#bat_stat").html("<i class='fa fa-flash' style='color:lime'></i><span style='color:white'> "+data.percent+"%</span>");  
+      else
+      {
+      if (parseInt(data.percent)>=90)
+    $("#bat_stat").html("<i class='fa fa-battery-4' style='color:lime'></i><span style='color:white'> "+data.percent+"%</span>");
+    else if(parseInt(data.percent)>=75)
+    $("#bat_stat").html("<i class='fa fa-battery-3' style='color:greenyellow'></i><span style='color:white'> "+data.percent+"%</span>");
+    else if(parseInt(data.percent)>=50)
+    $("#bat_stat").html("<i class='fa fa-battery-2' style='color:yellow'></i><span style='color:white'> "+data.percent+"%</span>");
+    else if(parseInt(data.percent)>=30)
+    $("#bat_stat").html("<i class='fa fa-battery-1' style='color:orange'></i><span style='color:white'> "+data.percent+"%</span>");
+    else
+    $("#bat_stat").html("<i class='fa fa-battery-0' style='color:red'></i><span style='color:white'> "+data.percent+"%</span>");
+      }
   },
   error:function(data){
-    $("#bat_stat").html("<div style='color:#FFFFFF'>Напряжение: <p style='color:#FF0000'>"+"Нет данных</p></div>");
+    $("#bat_stat").html("<i class='fa fa-battery-0' style='color:white'></i><span style='color:white'> n/a</span>");
   }
 });
-setTimeout('Reload()',1000);
+setTimeout('ReloadBattery()',1000);
  }
-setTimeout('Reload()',1000);
+  function ReloadStatus()
+ {
+$.ajax({
+  url: "battery",
+  cache: false,
+  success: function(data){
+    $("#statuspanel").html("<div style='color:#000000'>Напряжение: <span style='color:#000000'>"+data.volts+" мВ</span></div>\
+    <br>\
+    <div style='color:#000000'>Температура: <span style='color:#000000'>"+data.temp+" C</span></div>\
+    <br>\
+    <div style='color:#000000'>Потребляемый ток: <span style='color:#000000'>"+data.drain+" mA</span></div>\
+    ");
+  },
+  error:function(data){
+    $("#statuspanel").html("<div style='color:#000000'>Напряжение: <span style='color:#000000'> n/a </span></div>\
+    <br>\
+    <div style='color:#000000'>Температура: <span style='color:#000000'> n/a </span></div>\
+    <br>\
+    <div style='color:#000000'>Потребляемый ток: <span style='color:#000000'> n/a </span></div>\
+    ");
+  }
+});
+setTimeout('ReloadStatus()',1000);
+ }
+setTimeout('ReloadBattery()',100);
+setTimeout('ReloadStatus()',1000);
 </script>
 </body>
 
