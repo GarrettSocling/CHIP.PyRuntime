@@ -67,7 +67,7 @@ BAT_VOLT_LSB=$(i2cget -y -f 0 0x34 0x79)
 BAT_BIN=$(( $(($BAT_VOLT_MSB << 4)) | $(($(($BAT_VOLT_LSB & 0x0F)) )) ))
 
 BAT_VOLT=$(echo "($BAT_BIN*1.1)"|bc)
-echo "Battery voltage = "$BAT_VOLT"mV"
+echo "BAT_VOLT="$BAT_VOLT
 
 ###################
 #read Battery Discharge Current	7Ch, 7Dh	0 mV -> 000h,	0.5 mA/bit	1FFFh -> 1800 mA
@@ -81,7 +81,7 @@ BAT_IDISCHG_LSB=$(i2cget -y -f 0 0x34 0x7D)
 BAT_IDISCHG_BIN=$(( $(($BAT_IDISCHG_MSB << 5)) | $(($(($BAT_IDISCHG_LSB & 0x1F)) )) ))
 
 BAT_IDISCHG=$(echo "($BAT_IDISCHG_BIN*0.5)"|bc)
-echo "Battery discharge current = "$BAT_IDISCHG"mA"
+echo "BAT_DRAIN="$BAT_IDISCHG
 
 ###################
 #read Battery Charge Current	7Ah, 7Bh	0 mV -> 000h,	0.5 mA/bit	FFFh -> 1800 mA
@@ -95,7 +95,7 @@ BAT_ICHG_LSB=$(i2cget -y -f 0 0x34 0x7B)
 BAT_ICHG_BIN=$(( $(($BAT_ICHG_MSB << 4)) | $(($(($BAT_ICHG_LSB & 0x0F)) )) ))
 
 BAT_ICHG=$(echo "($BAT_ICHG_BIN*0.5)"|bc)
-echo "Battery charge current = "$BAT_ICHG"mA"
+echo "BAT_CHRG="$BAT_ICHG
 
 ###################
 #read internal temperature 	5eh, 5fh	-144.7c -> 000h,	0.1c/bit	FFFh -> 264.8c
@@ -107,7 +107,7 @@ TEMP_LSB=$(i2cget -y -f 0 0x34 0x5f)
 TEMP_BIN=$(( $(($TEMP_MSB << 4)) | $(($(($TEMP_LSB & 0x0F)) )) ))
 
 TEMP_C=$(echo "($TEMP_BIN*0.1-144.7)"|bc)
-echo "Internal temperature = "$TEMP_C"c"
+echo "TEMP="$TEMP_C
 
 ###################
 #read fuel gauge B9h
@@ -117,4 +117,4 @@ BAT_GAUGE_HEX=$(i2cget -y -f 0 0x34 0xb9)
 # MSB is 8 bits, LSB is lower 4 bits
 BAT_GAUGE_DEC=$(($BAT_GAUGE_HEX))
 
-echo "Battery gauge = "$BAT_GAUGE_DEC"%"
+echo "BAT_GAUGE="$BAT_GAUGE_DEC
