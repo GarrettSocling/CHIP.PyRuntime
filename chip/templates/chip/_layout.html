@@ -1,0 +1,111 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>C.H.I.P.</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-static-top center-style">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar1">
+          <span class="sr-only">Навигация</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand text-hide" href="#">SinoSoft
+        </a>
+      </div>
+      <div id="navbar1" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li class=""><a href="/">Статус</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Приложения <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#">Скрипты</a></li>
+              <li><a href="#">Приложения</a></li>
+              <!--<li class="divider"></li>
+              <li class="dropdown-header">Nav header</li>
+              <li><a href="#">Separated link</a></li>
+              <li><a href="#">One more separated link</a></li>
+              -->
+            </ul>
+          </li>
+          <li class="active"><div id="bat_stat">
+              <i class='fa fa-battery-0' style='color:white'></i><span style='color:white'> n/a</span>
+              </div></li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+    <!--/.container-fluid -->
+  </nav>
+<div class="container body-content">
+{% block content %}
+{% endblock %}
+
+    <hr />
+        <footer>
+            <p>&copy; 2016 - SinoSoft</p>
+        </footer>
+    </div>
+    
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+    <script>
+ function ReloadBattery()
+ {
+$.ajax({
+  url: "battery",
+  cache: false,
+  success: function(data){
+      if (parseFloat(data.drain) < 50.0)
+    $("#bat_stat").html("<i class='fa fa-flash' style='color:lime'></i><span style='color:white'> "+data.percent+"%</span>");  
+      else
+      {
+      if (parseInt(data.percent)>=90)
+    $("#bat_stat").html("<i class='fa fa-battery-4' style='color:lime'></i><span style='color:white'> "+data.percent+"%</span>");
+    else if(parseInt(data.percent)>=75)
+    $("#bat_stat").html("<i class='fa fa-battery-3' style='color:greenyellow'></i><span style='color:white'> "+data.percent+"%</span>");
+    else if(parseInt(data.percent)>=50)
+    $("#bat_stat").html("<i class='fa fa-battery-2' style='color:yellow'></i><span style='color:white'> "+data.percent+"%</span>");
+    else if(parseInt(data.percent)>=30)
+    $("#bat_stat").html("<i class='fa fa-battery-1' style='color:orange'></i><span style='color:white'> "+data.percent+"%</span>");
+    else
+    $("#bat_stat").html("<i class='fa fa-battery-0' style='color:red'></i><span style='color:white'> "+data.percent+"%</span>");
+      }
+  },
+  error:function(data){
+    $("#bat_stat").html("<i class='fa fa-battery-0' style='color:white'></i><span style='color:white'> n/a</span>");
+  }
+});
+setTimeout('ReloadBattery()',1000);
+ }
+ 
+setTimeout('ReloadBattery()',100);
+</script>
+{% block scripts %}
+{% endblock %}
+</body>
+
+</html>

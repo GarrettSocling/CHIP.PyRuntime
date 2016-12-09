@@ -88,7 +88,8 @@
             "program": "${workspaceRoot}/manage.py",
             "cwd": "${workspaceRoot}",
             "args": [
-                "runserver"
+                "runserver",
+                "--noreload"
             ],
             "debugOptions": [
                 "WaitOnAbnormalExit",
