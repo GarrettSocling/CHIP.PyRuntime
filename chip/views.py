@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
 from chip.BatteryInfo import Battery
+import chip.AppsInfo
 
 # Create your views here.
 
@@ -9,8 +10,10 @@ def index(request):
     """Return index page with status info"""
     batt = Battery()
     batt.getInfo()
+    apps = chip.AppsInfo.getAll()
     context = {
         'battery': batt,
+        'apps':apps
     }
     return render(request, 'chip/index.html', context)
 

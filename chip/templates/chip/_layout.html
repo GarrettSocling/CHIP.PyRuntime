@@ -34,15 +34,13 @@
         <ul class="nav navbar-nav navbar-right">
           <li class=""><a href="/">Статус</a></li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Приложения <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Приложения<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Скрипты</a></li>
-              <li><a href="#">Приложения</a></li>
-              <!--<li class="divider"></li>
-              <li class="dropdown-header">Nav header</li>
-              <li><a href="#">Separated link</a></li>
-              <li><a href="#">One more separated link</a></li>
-              -->
+                {% for app in apps %}
+    <li><a href="{{ app.url }}">{{ app.name }}</a></li>
+{% endfor %}
+
+              <li><a href="/admin/">Управление</a></li>
             </ul>
           </li>
           <li class="active"><div id="bat_stat">
@@ -76,7 +74,7 @@
  function ReloadBattery()
  {
 $.ajax({
-  url: "battery",
+  url: "/battery",
   cache: false,
   success: function(data){
       if (parseFloat(data.drain) < 50.0)
@@ -101,7 +99,7 @@ $.ajax({
 });
 setTimeout('ReloadBattery()',1000);
  }
- 
+
 setTimeout('ReloadBattery()',100);
 </script>
 {% block scripts %}

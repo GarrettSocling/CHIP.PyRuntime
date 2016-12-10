@@ -1,5 +1,9 @@
+#!/usr/bin/env python
 import os
 from subprocess import Popen, PIPE
+import CHIP_IO.GPIO as GPIO
+from time import sleep
+
 if os.name=="nt":
     script = "battery.bat"
 else:
@@ -13,3 +17,15 @@ for kv in output.split("\r\n"):
     if len(keyval)==2:
         print(keyval[0]+"="+keyval[1])
 #print(output.split("\r\n"))
+GPIO.cleanup()
+try:
+    GPIO.setup("XIO-P0",GPIO.OUT)
+except RuntimeError as err:
+    print(err)
+GPIO.output("XIO-P0", GPIO.LOW)
+sleep(1)
+GPIO.output("XIO-P0", GPIO.HIGH)
+sleep(1)
+GPIO.output("XIO-P0", GPIO.LOW)
+sleep(2)
+GPIO.cleanup()
