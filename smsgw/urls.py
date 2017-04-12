@@ -23,5 +23,5 @@ def modem_thread():
         modem.process()
         sleep(1)
 
-MODEMTHREAD=Thread(target=modem_thread)
-MODEMTHREAD.start()
+#MODEMTHREAD=Thread(target=modem_thread)
+#MODEMTHREAD.start()
