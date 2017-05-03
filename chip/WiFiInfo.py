@@ -24,8 +24,18 @@ class WiFi():
 
 class WifiNet():
     """Network info"""
-    def __init__(self,name):
-        self.name = name
-        self.signal=""
-        self.rate=""
-        self.security=""
+    def __init__(self,raw):
+        elems = raw.split(' ')
+        elems = list(filter(None, elems))
+        if elems[0] == "*":
+            self.name = elems[1]
+            self.signal = elems[6]
+            self.rate = elems[4]
+            self.security = ' '.join(elems[8:len(elems)])
+            self.connected = True
+        else:
+            self.name = elems[0]
+            self.signal = elems[5]
+            self.rate = elems[3]
+            self.security = ' '.join(elems[7:len(elems)])
+            self.connected = False
