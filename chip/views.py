@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
 from chip.BatteryInfo import Battery
+from chip.WiFiInfo import WiFi
 import chip.AppsInfo
 
 # Create your views here.
@@ -27,3 +28,16 @@ def battery(request):
          "charging":batt.charging,
          "drain":batt.drain,
          "temp":batt.temp})
+
+def wifi(request):
+    batt = Battery()
+    batt.getInfo()
+    apps = chip.AppsInfo.getAll()
+    wifi = WiFi()
+    wifi.getInfo()
+    context = {
+        'battery': batt,
+        'apps': apps,
+        'wifi': wifi
+    }
+    return render(request,'chip/wifi.html',context)
