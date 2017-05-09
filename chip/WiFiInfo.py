@@ -19,23 +19,25 @@ class WiFi():
         output = output.decode("utf-8")
         lines = output.split(os.linesep)
         self.ip = lines[0].strip()
-        for i in range(2,len(lines)-3):
+        for i in range(2, len(lines)-3):
             self.nets.append(WifiNet(lines[i]))
 
 class WifiNet():
     """Network info"""
-    def __init__(self,raw):
+    def __init__(self, raw):
         elems = raw.split(' ')
         elems = list(filter(None, elems))
         if elems[0] == "*":
-            self.name = elems[1]
-            self.signal = elems[6]
-            self.rate = elems[4]
-            self.security = ' '.join(elems[8:len(elems)])
+            ind = elems.index("Infra")
+            self.name = ' '.join(elems[1:ind])
+            self.signal = elems[ind+4]
+            self.rate = elems[ind+2]
+            self.security = ' '.join(elems[ind+6:len(elems)])
             self.connected = True
         else:
-            self.name = elems[0]
-            self.signal = elems[5]
-            self.rate = elems[3]
-            self.security = ' '.join(elems[7:len(elems)])
+            ind = elems.index("Infra")
+            self.name = ' '.join(elems[0:ind])
+            self.signal = elems[ind+4]
+            self.rate = elems[ind+2]
+            self.security = ' '.join(elems[ind+6:len(elems)])
             self.connected = False
