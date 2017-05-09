@@ -1,5 +1,8 @@
 @echo off
 echo 127.0.0.1
+echo 192.168.0.1
+
+echo Networks:
 
 echo *  SSID            MODE   CHAN  RATE       SIGNAL  BARS  SECURITY
 echo    MTSRouter-кв5   Infra  13    54 Mbit/s  70      ▂▄▆_  WPA2

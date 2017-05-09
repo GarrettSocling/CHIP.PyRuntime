@@ -18,8 +18,8 @@ class WiFi():
         exit_code = process.wait()
         output = output.decode("utf-8")
         lines = output.split(os.linesep)
-        self.ip = lines[0].strip()
-        for i in range(2, len(lines)-3):
+        self.ip = ', '.join(lines[0:lines.index("Networks:")])
+        for i in range(lines.index("Networks:")+2, len(lines)-3):
             self.nets.append(WifiNet(lines[i]))
     def connect(self,net,pwd):
         cmd = "nmcli d wifi connect "+net+" password "+pwd
