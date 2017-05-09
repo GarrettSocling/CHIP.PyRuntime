@@ -21,7 +21,13 @@ class WiFi():
         self.ip = lines[0].strip()
         for i in range(2, len(lines)-3):
             self.nets.append(WifiNet(lines[i]))
-
+    def connect(self,net,pwd):
+        cmd = "nmcli d wifi connect "+net+" password "+pwd
+        if os.name == "nt":
+            return
+        process = Popen(cmd, stdout=PIPE, shell=True)
+        (output, err) = process.communicate()
+        exit_code = process.wait()
 class WifiNet():
     """Network info"""
     def __init__(self, raw):

@@ -33,17 +33,19 @@ def wifi(request):
     batt = Battery()
     batt.getInfo()
     apps = chip.AppsInfo.getAll()
-    wifi = WiFi()
-    wifi.getInfo()
+    wifi_info = WiFi()
+    wifi_info.getInfo()
     context = {
         'battery': batt,
         'apps': apps,
-        'wifi': wifi
+        'wifi': wifi_info
     }
     return render(request,'chip/wifi.html',context)
 
 def wifi_connect(request,pk):
     if request.method == 'POST':
+        wifi_info = WiFi()
+        wifi_info.connect(pk,request.POST['pwd'])
         return redirect('wifi')
     else:
         batt = Battery()
